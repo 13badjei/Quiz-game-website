@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- This is the login page of the website -->
+    <title>Login</title>
+    <link href="mystyles.css" type="text/css" rel="stylesheet">
+    <style>
+        body {
+            background-color: lightblue;
+        }
+    </style>
+</head>
+<body onload="checkLogin()">
+    <!-- These are the links to the other pages of the website -->
+    <div class="topnav" id="myTopNav">
+        <a href="index.html">Home</a>
+        <a href="registration.html">Registration</a>
+        <a href="login.html">Login</a>
+        <a href="game.html">Game</a>
+        <a href="top scores of registered users and rankings.html">Top scores of registered users and rankings</a>
+    </div>
+    <!-- This is what the vistor sees on the page -->
+    <link href="mystyles2.css" type="text/css" rel="stylesheet">
+    <div class="imgcontainer">
+        <img src="img_avatar2.png" alt="Avatar" class="avatar">
+    </div>
+
+    <div id="loginPers">
+        <label><b>E-mail address/username</b></label>
+        <input type="text" placeholder="Enter e-mail address/username" name="uname" id="loginEmailAdress/Username" required>
+
+        <label><b>Password</b></label>
+        <input type="password" placeholder="Enter password" name="psw" id="loginPassword" required>
+
+        <button type="submit" onclick="checkLogin();">Login</button>
+        <p id="LoginResult">Not logged in.</p>
+        <input type="checkbox" checked="checked"> Remember me
+    </div>
+
+    <div class="container" style="background-color:#f1f1f1">
+        <button type="button" class="cancelbtn">Cancel</button>
+        <span class="psw">Forgot <a href="#">password?</a></span>
+    </div>
+    <script>
+        /* Checks the username and password match the user name and password of a 
+            registered user and provides feedback to user. */
+       function checkLogin(){
+            //Get a reference to the div where we will display the login result
+            var loginResult = document.getElementById("LoginResult");
+           
+            //Extract the e-mail address/username and password that the user has entered
+            var emailAdressAndUsernameInput = document.getElementById("loginEmailAdress/Username").value;
+            var pwdInput = document.getElementById("loginPassword").value; 
+
+            //Output for debugging
+            console.log("Login name: " + emailAdressAndUsernameInput+ "; Login password" + pwdInput);
+
+            //Check to see if we have data stored for this user
+            if([emailAdressAndUsernameInput] === undefined){
+                //No user found - provide feedback to user.
+                loginResult.innerHTML = "E-mail address/username missing";
+                return;
+            }
+            //Check password
+            //Get object that is stored for the user name.
+            var usrObj = JSON.parse(localStorage[emailAdressAndUsernameInput]);
+            
+           
+             //Check to see if we have data stored for this user
+            if([emailAdressAndUsernameInput].password === undefined){
+                //No password found - provide feedback to user.
+                loginResult.innerHTML = "Password missing";
+                return;
+            }
+            //Compare the entered password with the stored password
+            if(pwdInput !== usrObj.password){
+                //Incorrect password - provide feedback to user
+                loginResult.innerHTML = "Password incorrect";
+                return;
+            }
+
+            //If we have got this far, the username and password are correct
+            
+            //Record the user that has logged in using local storage.
+            localStorage.loggedInUser = nameInput;
+
+            //Provide feedback to user - you could also provide a logout button - see the example in my slides.
+            loginResult.innerHTML = "User logged in.";
+        }
+
+        /* This function is called when a logged in user 
+            plays the game and gets a score */
+        function updateScore(newScore) {
+            //Get the JavaScript object that holds the data for the logged in user
+            var usrObj = JSON.parse(localStorage[localStorage.loggedInUser]);
+
+            //Update the user object with the new top score
+            /* NOTE YOU NEED TO CHANGE THIS CODE TO CHECK TO SEE IF THE NEW SCORE
+                IS GREATER THAN THE OLD SCORE */
+            usrObj.topscore = newScore;
+
+            //Put the user data back into local storage.
+            localStorage[localStorage.loggedInUser] = JSON.stringify(usrObj);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- This is the registration page of the website -->
+    <title>Registration</title>
+    <link href="mystyles.css" type="text/css" rel="stylesheet">
+    <style>
+        body {
+            background-color: lightblue;
+        }
+    </style>
+</head>
+<body>
+    <!-- These are the links to the other pages of the website -->
+    <div class="topnav" id="myTopNav">
+        <a href="index.html">Home</a>
+        <a href="registration.html">Registration</a>
+        <a href="login.html">Login</a>
+        <a href="game.html">Game</a>
+        <a href="top scores of registered users and rankings.html">Top scores of registered users and rankings</a>
+    </div>
+    <!-- This is what the vistor sees on the page -->
+    <form id="usrDetails" onsubmit="return false">
+        Full name:<input type="text" id="fullNameInput"><br> 
+        Email/username:<input type="email" id="emailAndUsernameInput"><br> 
+        Password:<input type="password" id="passwordInput"><br> 
+        Address:<input type="text" id="addressInput"><br> 
+        Phone number:<input type="text" id="phoneNumberInput"><br>
+        <button onclick="registerUser()">Register</button>
+    </form>
+
+    <!-- Result of registration displayed here -->
+    <p id="result"> </p>    
+    <script>
+        function registerUser(){
+            var resultPara = document.getElementById("result");
+            var re = /(?:\d{3}|\(\d{3}\))([-\/\.])\d{3}\1\d{4}/;
+            var OK = re.exec(phoneNumberInput.value);
+            var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+            var OK2 = mailformat.exec(emailAndUsernameInput.value);
+
+            //Build the object that we're going to store
+            var usrObject = {};
+            usrObject.fullName = document.getElementById("fullNameInput").value;
+            usrObject.emailAndUsername = document.getElementById("emailAndUsernameInput").value;
+            usrObject.password = document.getElementById("passwordInput").value;
+            usrObject.address = document.getElementById("addressInput").value;
+            usrObject.phoneNumber = document.getElementById("phoneNumberInput").value;
+            usrObject.topScore = 0;
+
+            //JavaScript validation
+            if (usrObject.fullName === ""){
+                resultPara.innerHTML = "Full name missing";
+                return;
+            }
+            if (usrObject.emailAndUsername === "" || !OK2){
+                    resultPara.innerHTML = "E-mail/username missing or in wrong format";
+                    return;
+            }
+            if (usrObject.password === ""){
+                    resultPara.innerHTML = "Password missing";
+                    return;
+            }
+            if (usrObject.address === ""){
+                    resultPara.innerHTML = "Address missing";
+                    return;
+            }
+            if (usrObject.phoneNumber === "" || !OK){
+                    resultPara.innerHTML = "Phone number missing or in wrong format. The excepted format is ###-###-####";
+                    return;
+            }
+            //Store user details
+            localStorage[usrObject.emailAndUsername] = JSON.stringify(usrObject);
+
+            //Inform the user of the result
+            document.getElementById("result").innerHTML = "Registration successful";
+        }
+        </script>
+</body>
+</html>
